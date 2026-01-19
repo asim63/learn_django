@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseNotFound
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from django.urls import reverse
 # Create your views here.
 
 monthly_challenges = {
@@ -18,16 +21,29 @@ monthly_challenges = {
 }
 
 def index(request):
-    return HttpResponse("Welcome")
+    list_items = ""
+    months = list(monthly_challenges.keys())
+    for month in months:
+        capitalMonth = month.capitalize()
+        redirect_url = reverse('monthly-challenge',args=[month.lower()])
+        list_items += f"<li><a href='{redirect_url}'>{capitalMonth}</a></li>"
+    return HttpResponse(f"<ul>{list_items}</ul>")
+    # html="""
+    #     <ul>
+    #         <li><a href="/testapp/january/">January</a></li>
+    #         <li><a href="/testapp/february/">February</a></li>
+    #     </ul>
+    # """
 
 def monthly_challenge(request, month):
     try:
         challenge_text = monthly_challenges[month.lower()]
-        return HttpResponse(challenge_text)
+        return HttpResponse(f"<h1>{month} challenge: {challenge_text}</h1>")
     except KeyError:
-        return HttpResponseNotFound("This month is not supported!")
+        return HttpResponseNotFound("<h1>This is not available</h1>")
 
 def monthly_challenge_by_num(request, month):
     months = list(monthly_challenges.keys())
     redirect_month = months[month-1]
-    return HttpResponse(f"/testapp/{redirect_month}")
+    redirect_url = reverse("monthly-challenge", args=[redirect_month])
+    return redirect(redirect_url)
