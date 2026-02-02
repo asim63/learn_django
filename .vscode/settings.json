@@ -1,0 +1,5 @@
+{
+  "enmet.includedLanguages": {
+    "django-html": "html"
+  }
+}

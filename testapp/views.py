@@ -1,7 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse,HttpResponseNotFound
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
 from django.urls import reverse
 # Create your views here.
 
@@ -21,13 +20,19 @@ monthly_challenges = {
 }
 
 def index(request):
-    list_items = ""
+    # list_items = ""
+    # months = list(monthly_challenges.keys())
+    # for month in months:
+    #     capitalMonth = month.capitalize()
+    #     redirect_url = reverse('monthly-challenge',args=[month.lower()])
+    #     list_items += f"<li><a href='{redirect_url}'>{capitalMonth}</a></li>"
+    # return HttpResponse(f"<ul>{list_items}</ul>")
+    
     months = list(monthly_challenges.keys())
-    for month in months:
-        capitalMonth = month.capitalize()
-        redirect_url = reverse('monthly-challenge',args=[month.lower()])
-        list_items += f"<li><a href='{redirect_url}'>{capitalMonth}</a></li>"
-    return HttpResponse(f"<ul>{list_items}</ul>")
+
+    return render(request, "testapp/index.html", {
+        "months": months
+    })
     # html="""
     #     <ul>
     #         <li><a href="/testapp/january/">January</a></li>
@@ -38,7 +43,11 @@ def index(request):
 def monthly_challenge(request, month):
     try:
         challenge_text = monthly_challenges[month.lower()]
-        return HttpResponse(f"<h1>{month} challenge: {challenge_text}</h1>")
+       # return HttpResponse(f"<h1>{month} challenge: {challenge_text}</h1>")
+        return render(request,'testapp/challenge.html', {
+            "text": challenge_text,
+            "month_name" : month.capitalize()
+        })
     except KeyError:
         return HttpResponseNotFound("<h1>This is not available</h1>")
 
