@@ -1,19 +1,18 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Giga Challenges</title>
-  </head>
-  <body>
-    {% extends "base.html"%}{%block content%}
-    <ul>
-      {% for month in months %}
-      <li>
-        <a href="{% url 'monthly-challenge' month %}">{{ month|title }} </a>
-      </li>
-      {% endfor %}
-    </ul>
-    {% endblock content%}
-  </body>
-</html>
+<!-- challenges\templates\challenges\index.html -->
+<!-- pre tag is not required, just for proper blog format -->
+<pre>
+{% extends "base.html" %}
+
+{% block page_title %}
+  All Challenges
+{% endblock %}
+
+{% block content %}
+{% include "testapp/header.html" %}
+  <ul>
+    {% for month in months %}
+      <li><a href="{% url 'monthly-challenge' month %}">{{ month|title }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
+</pre>
